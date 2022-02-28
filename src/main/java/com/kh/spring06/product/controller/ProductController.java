@@ -38,7 +38,7 @@ public class ProductController {
 	@GetMapping("/add.do")
 	public String add(HttpSession session) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
-		System.out.println(loginUser);
+		
 		if(loginUser==null||!loginUser.getMemberId().equals("admin")) {
 			session.setAttribute("alertMsg", "관리자가 아닙니다.");
 			return "redirect:../";
