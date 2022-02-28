@@ -41,7 +41,7 @@ public class ProductController {
 		
 		if(loginUser==null||!loginUser.getMemberId().equals("admin")) {
 			session.setAttribute("alertMsg", "관리자가 아닙니다.");
-			return "redirect:../";
+			return "redirect:/";
 			
 		}
 		else {
