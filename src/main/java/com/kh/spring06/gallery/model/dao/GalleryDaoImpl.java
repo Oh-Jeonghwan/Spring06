@@ -30,7 +30,6 @@ public class GalleryDaoImpl implements GalleryDao{
 
 	@Override
 	public int attInsert(Attachment at) {
-		System.out.println(at);
 		return sqlSession.insert("gallery.gelleryAttInsert",at); 
 	}
 
@@ -56,7 +55,6 @@ public class GalleryDaoImpl implements GalleryDao{
 
 	@Override
 	public int gRinsert(GalleryReply gr) {
-		System.out.println(gr);
 		return sqlSession.insert("gallery.gRinsert",gr);
 	}
 
@@ -72,19 +70,16 @@ public class GalleryDaoImpl implements GalleryDao{
 	
 	@Override
 	public int galleryUpdate(Gallery gu) {
-		System.out.println("갤러리 테이블 업데이트 용: "+gu);
 		return sqlSession.update("gallery.galleryUpdate",gu);
 	}
 
 	@Override
 	public int statusN(int gno) {
-		System.out.println("status업데이트용: "+gno);
 		return sqlSession.update("gallery.statusN",gno);
 	}
 
 	@Override
 	public int attUpdate(Attachment at) {
-		System.out.println("어태치 인서트용: " + at);
 		return sqlSession.insert("gallery.attUpdate",at);
 	}
 
