@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- xml 파일의 유효성 체크를 위한 부분 -->
+  <mapper namespace="gallery">
+  	<select id="galleryList" resultType="galleryThumbnail" parameterType="map">
+  		<!-- CDATA는 태그안에서는 전부 문자열로 치환시켜버리기 때문입니다 -->
+		  	SELECT *
+		  	FROM(	
+		  		 SELECT ROWNUM RNUM, A.*
+		  		 FROM (SELECT GALLERY_NO
+		  				    , GALLERY_TITLE
+		  				    , FILE_PATH||CHANGE_NAME PATH
+		  				    , COUNT
+					    FROM GALLERY G
+					    JOIN GALLERY_ATTATCHMENT GA ON (GALLERY_NO=REF_GNO)
+					   WHERE FILE_LEVEL=1
+				  	     AND G.STATUS='Y'
+				  	     AND GA.STATUS='Y'
+				  	   ORDER BY ENROLL_DATE DESC) A)
+			WHERE RNUM BETWEEN #{pageStart} AND #{perPageNum}
+  	</select>
+  	
+  	<!-- gallery 테이블에 인서트 -->
+  	<insert id="galleryInsert" parameterType="gallery">
+  		INSERT INTO GALLERY(GALLERY_NO
+  						  , GALLERY_TITLE
+  						  , GALLERY_EXPLAIN
+  						  , ENROLL_DATE
+  						  , GALLERY_WRITER)
+  		VALUES(SEQ_GNO.NEXTVAL
+  			 , #{galleryTitle}
+  			 , #{galleryExplain}
+  			 , DEFAULT
+  			 , #{galleryWriter})
+  	</insert>
+  	
+  	<insert id="gelleryAttInsert" parameterType="attachment">
+  		INSERT INTO GALLERY_ATTATCHMENT(ATT_NO
+  									  , ORIGIN_NAME
+  									  , CHANGE_NAME
+  									  , FILE_PATH
+  									  , STATUS
+  									  , REF_GNO
+  									  , FILE_LEVEL)
+  		VALUES(SEQ_GATNO.NEXTVAL
+  		     , #{originName}
+  		     , #{changeName}
+  		     , '/resources/upfile/'
+  		     , DEFAULT
+  		     , #{refGno}
+  		     , #{fileLevel})
+  	</insert>
+  	
+  	<select id="selectGno" resultType="int">
+  		SELECT LAST_NUMBER 
+		FROM USER_SEQUENCES 
+		WHERE SEQUENCE_NAME = 'SEQ_GNO'
+  	</select>
+  	
+  	<select id="selectGContent" parameterType="int" resultType="gallerycontent">
+  		SELECT GALLERY_NO
+  			 , GALLERY_TITLE
+  			 , GALLERY_EXPLAIN
+  			 , FILE_PATH||CHANGE_NAME PATH
+  			 , ENROLL_DATE
+  			 , GALLERY_WRITER
+		FROM GALLERY G
+		JOIN GALLERY_ATTATCHMENT GA ON (GALLERY_NO=REF_GNO)
+		WHERE REF_GNO=#{bno}
+  		AND G.STATUS='Y'
+  		AND GA.STATUS='Y'
+  	</select>
+  	
+  	<select id="getTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM GALLERY
+    </select>
+    
+    <update id="galleryCountUp" parameterType="int">
+ 		UPDATE GALLERY
+ 		SET COUNT = COUNT+1
+ 		WHERE GALLERY_NO = #{bno}
+    </update>
+    
+    <insert id="gRinsert" parameterType="galleryreply">
+  	  	INSERT INTO GALLERY_REPLY(REPLY_NO
+  	  						  , REPLY_CONTENT
+  	  						  , REF_GNO
+  	  						  , REFLY_WRITER
+							  , CREATE_DATE
+							  , STATUS)
+		VALUES(SEQ_GRNO.NEXTVAL
+			 , #{replyContent}
+			 , #{refGno}
+			 , #{reflyWriter}
+			 , DEFAULT
+			 , DEFAULT)
+  	  </insert>
+  	  
+  	  <select id="gRList" parameterType="int" resultType="galleryreply">
+  	  	SELECT *
+		FROM GALLERY_REPLY
+		WHERE REF_GNO=#{gno}
+  	  </select>
+  	  
+  	  <select id="galleryOne" parameterType="int" resultType="gallery">
+  	  	SELECT *
+  	  	FROM GALLERY
+  	  	WHERE GALLERY_NO=#{gno}
+  	  </select>
+  	  
+  	  <update id="galleryUpdate" parameterType="gallery">
+  	  	UPDATE GALLERY
+  	  	SET GALLERY_TITLE=#{galleryTitle},
+  	  		GALLERY_EXPLAIN=#{galleryExplain}
+  	  	WHERE GALLERY_NO=#{galleryNO}
+  	  </update>
+  	  
+  	  <update id="statusN" parameterType="int">
+  	  	UPDATE GALLERY_ATTATCHMENT
+  	  	SET STATUS='N'
+  	  	WHERE REF_GNO=#{gno}
+  	  </update>
+  	  
+  	  <insert id="attUpdate" parameterType="attachment">
+  	  	INSERT INTO GALLERY_ATTATCHMENT(ATT_NO
+  									  , ORIGIN_NAME
+  									  , CHANGE_NAME
+  									  , FILE_PATH
+  									  , STATUS
+  									  , REF_GNO
+  									  , FILE_LEVEL)
+  		VALUES(SEQ_GATNO.NEXTVAL
+  		     , #{originName}
+  		     , #{changeName}
+  		     , '/resources/upfile/'
+  		     , DEFAULT
+  		     , #{refGno}
+  		     , #{fileLevel}) 
+  	  </insert>
+  	  
+  	  <update id="gDelete" parameterType="int">
+  	  	UPDATE GALLERY
+  	  	   SET STATUS='N'
+  	  	 WHERE GALLERY_NO = #{gno}
+  	  </update>
+  	
+  </mapper>

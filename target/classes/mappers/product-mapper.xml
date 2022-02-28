@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- xml 파일의 유효성 체크를 위한 부분 -->
+  <mapper namespace="product">
+  	<insert id="addProduct" parameterType="product">
+  		INSERT INTO PRODUCT(PRODUCT_NO
+  						  , PRODUCT_NAME
+  						  , PRICE
+  						  , TYPE)
+  		VALUES (SEQ_PNO.NEXTVAL
+  			  , #{productName}
+  			  , #{price}
+  			  , #{type})
+  	</insert>
+  	
+  	<!-- 상품 목록 전체조회 쿼리문 -->
+  	<select id ="productList" resultType="product" parameterType="map">
+  		SELECT *
+  		FROM PRODUCT
+  		ORDER BY ${col} ${order}
+  	</select>
+  	
+  	<!-- 상품 상세조회 -->
+  	<select id="detailProduct" resultType="product" parameterType="int">
+  		SELECT *
+  		FROM PRODUCT
+  		WHERE PRODUCT_NO = #{productNo}
+  	</select>
+  	
+  	<!-- 상품 삭제 -->
+  	<delete id="deleteProduct" parameterType="int">
+  		DELETE 
+  		FROM PRODUCT
+  		WHERE PRODUCT_NO = #{productNo}
+  	</delete>
+  </mapper>
