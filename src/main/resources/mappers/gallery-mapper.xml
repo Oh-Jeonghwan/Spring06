@@ -102,6 +102,7 @@
   	  	SELECT *
 		FROM GALLERY_REPLY
 		WHERE REF_GNO=#{gno}
+		AND STATUS='Y'
   	  </select>
   	  
   	  <select id="galleryOne" parameterType="int" resultType="gallery">

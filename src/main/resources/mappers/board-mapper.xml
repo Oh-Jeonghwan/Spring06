@@ -120,6 +120,7 @@
   	  	SELECT *
 		FROM BOARD_REPLY
 		WHERE REF_BNO=#{bno}
+		AND STATUS='Y'
   	  </select>
   	  
   	  <select id="selectdBoard" parameterType="int" resultType="board">

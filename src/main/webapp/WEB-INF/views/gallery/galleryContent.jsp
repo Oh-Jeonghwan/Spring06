@@ -139,7 +139,6 @@
         		},
         		type: "post",
         		success: function(result){
-        			console.log(result);
         			$("#replyContent").val("");
         			if(result>0){
         				alert("댓글이 등록되었습니다.");
@@ -158,7 +157,6 @@
     				success:function(list){
     					//댓글 개수만큼 반복=> 누적(문자열)
     					var result = "";
-    					console.log(list);
     					for(var i in list){//for in 문
     						result += "<tr>"
     										+"<td>"+list[i].reflyWriter + "</td>"
