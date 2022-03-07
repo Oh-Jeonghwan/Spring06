@@ -51,7 +51,7 @@
 						<input type="file" name="upfile" multiple accept=".jpg , .png, .gif, .jfif" required><br><br>
 					</div>
 					<div align="right">
-						<button type="submit">등록</button>
+						<button type="submit" id="submitModifyBoardBtn">등록</button>
 						<button type="button" onclick="location.href='list.do?currentpage=1'">취소</button>
 					</div>
 				</div>
@@ -60,7 +60,8 @@
 	</div>
 	<br><br><br><br><br>
 	<script type="text/javascript">
-		$(function() { var oEditors = []; // 개발되어 있는 소스에 맞추느라, 전역변수로 사용하였지만, 지역변수로 사용해도 전혀 무관 함. 
+		var oEditors = [];
+		$(function() { 
 		
 			// Editor Setting 
 			nhn.husky.EZCreator.createInIFrame({ oAppRef : oEditors, // 전역변수 명과 동일해야 함. 
@@ -74,6 +75,12 @@
 					bUseVerticalResizer : true, 
 					// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음) 
 					bUseModeChanger : true, } });
+			});
+		
+		$("#submitModifyBoardBtn").click(function() {
+
+			oEditors.getById["galleryExplain"].exec("UPDATE_CONTENTS_FIELD", []);
+
 			});
 
 	

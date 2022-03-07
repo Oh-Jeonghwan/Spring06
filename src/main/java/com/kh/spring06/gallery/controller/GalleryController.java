@@ -246,11 +246,11 @@ public class GalleryController {
 							  , @RequestParam int gno
 							  , HttpSession session) {
 		Gallery gu = new Gallery();
-		System.out.println(galleryExplain);
+		
 		gu.setGalleryNO(gno);
 		gu.setGalleryTitle(galleryTitle);
 		gu.setGalleryExplain(galleryExplain);
-		
+
 		//먼저 갤러리 테이블 제목이랑 설명란 변경(gno를 이용)
 		int galleryU = galleryService.galleryUpdate(gu);
 		int statusN = 0;
