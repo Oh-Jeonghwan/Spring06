@@ -28,7 +28,7 @@ public class ProductController {
 	private ProductService productService;
 
 	//메인화면 띄우기=> 상품관리 메인페이지
-	@GetMapping("/")
+	@GetMapping("/home.do")
 	public String productHome() {
 		
 		return "product/home"; //"WEB-INF/views/product/home.jsp"
@@ -41,7 +41,7 @@ public class ProductController {
 		
 		if(loginUser==null||!loginUser.getMemberId().equals("admin")) {
 			session.setAttribute("alertMsg", "관리자가 아닙니다.");
-			return "redirect:/";
+			return "redirect:home.do";
 			
 		}
 		else {

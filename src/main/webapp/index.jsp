@@ -105,7 +105,7 @@
 			<div class="menu"><a href="${pageContext.request.contextPath}">HOME</a></div>
 			<div class="menu"><a href="${pageContext.request.contextPath}/board/union.do?page=1">일반게시판</a></div>
 			<div class="menu"><a href="${pageContext.request.contextPath}/gallery/list.do?page=1">갤러리 게시판</a></div>
-			<div class="menu"><a href="${pageContext.request.contextPath}/product/">상품 게시판</a></div>
+			<div class="menu"><a href="${pageContext.request.contextPath}/product/home.do">상품 게시판</a></div>
 			<div class="menu"><a href="${pageContext.request.contextPath}/admin/memberList.do">관리자 게시판</a></div>
 		</div>
 	

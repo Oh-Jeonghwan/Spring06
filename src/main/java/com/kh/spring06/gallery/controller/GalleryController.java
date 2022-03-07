@@ -246,7 +246,7 @@ public class GalleryController {
 							  , @RequestParam int gno
 							  , HttpSession session) {
 		Gallery gu = new Gallery();
-		
+		System.out.println(galleryExplain);
 		gu.setGalleryNO(gno);
 		gu.setGalleryTitle(galleryTitle);
 		gu.setGalleryExplain(galleryExplain);
