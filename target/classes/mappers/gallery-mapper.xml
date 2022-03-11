@@ -89,13 +89,15 @@
   	  						  , REF_GNO
   	  						  , REFLY_WRITER
 							  , CREATE_DATE
-							  , STATUS)
+							  , STATUS
+							  , RATING)
 		VALUES(SEQ_GRNO.NEXTVAL
 			 , #{replyContent}
 			 , #{refGno}
 			 , #{reflyWriter}
 			 , DEFAULT
-			 , DEFAULT)
+			 , DEFAULT
+			 , #{rating})
   	  </insert>
   	  
   	  <select id="gRList" parameterType="int" resultType="galleryreply">

@@ -14,4 +14,5 @@ public class GalleryReply {
 	private String reflyWriter; //	REFLY_WRITER VARCHAR2(20) NOT NULL,
 	private String createDate;//	CREATE_DATE DATE DEFAULT SYSDATE NOT NULL,
 	private String status;//	STATUS VARCHAR(1) DEFAULT 'Y'
+	private int rating;
 }

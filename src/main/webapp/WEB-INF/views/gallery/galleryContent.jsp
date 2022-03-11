@@ -7,6 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
 <style>
 	.outer{
 		border-bottom: solid black 1px;
@@ -58,6 +60,43 @@
 	.list-area{
 		min-height: 400px;
 	}
+	
+	.rating fieldset{
+		display: inline-block; /* 하위 별점 이미지들이 있는 영역만 자리를 차지함.*/
+		direction: rtl; /* 이모지 순서 반전 기본 ltr -> rtl*/
+		border: 0; /* 필드셋 테두리 제거 */
+	}
+	.rating input[type=radio]{
+    	display: none; /* 라디오박스 감춤 */
+	}
+	
+	.rating label{
+		font-size: 1.5em; /* 이모지 크기 */
+		color: transparent; /* 기존 이모지 컬러 제거 */
+		text-shadow: 0 0 0 #f0f0f0; /* 새 이모지 색상 부여 text-shadow 0 0 0은 면을 다 채움 */
+	}
+
+	.rating label:hover{
+    	text-shadow: 0 0 0 #fc0; /* 마우스 호버 */
+	}
+	.rating label:hover ~ label{ /*형제 선택자*/
+		text-shadow: 0 0 0 #fc0; /* 마우스 호버 뒤에오는 이모지들 */
+	}
+
+	.rating fieldset legend{
+    	text-align: left;
+	}
+
+ 	/*~ 는 앞에 있는게 아닌 뒤에 있는게 선택 따라서 label 태그가 라디오 태그 뒤로 와야함*/
+	.rating input[type=radio]:checked ~ label{
+    	text-shadow: 0 0 0 #fc0; /*체크된 후에 색 유지*/
+	}
+	
+	/*
+	.rate svg:nth-child(-n+3){
+		color:#F05522;
+	}
+	*/
 </style>
 </head>
 <body style="width:1000px; margin:auto;">
@@ -108,11 +147,28 @@
 				<!--로그인이 되어있을 경우: 댓글작성 가능-->
 				<!--로그인이 안 되어 있을 경우: 댓글작성 불가능-->
 				<tr>
-					<th>댓글 작성</th>
+					<th style="vertical-align:middle">댓글 작성</th>
+					<td style="vertical-align:middle">
+						<label>평점</label><br>
+						<div class="rating">
+							<fieldset>
+								<input type="radio" name="rating" value="5" id="rate1" required>
+								<label for="rate1">⭐</label>
+								<input type="radio" name="rating" value="4" id="rate2">
+								<label for="rate2">⭐</label>
+								<input type="radio" name="rating" value="3" id="rate3">
+								<label for="rate3">⭐</label>
+								<input type="radio" name="rating" value="2" id="rate4">
+								<label for="rate4">⭐</label>
+								<input type="radio" name="rating" value="1" id="rate5">
+								<label for="rate5">⭐</label>
+   		 					</fieldset>
+			            </div>
+					</td>
 					<td>
 						<textarea id="replyContent" cols="50" rows="3" style="resize:none;" ${(loginUser == null)?'readonly':'' } placeholder="로그인 후 작성 가능"></textarea>
 					</td>
-					<td><button ${(loginUser != null)?"onclick=insertReply()":""} >댓글등록</button></td>
+					<td style="vertical-align:middle"><button ${(loginUser != null)?"onclick=insertReply()":""} >댓글등록</button></td>
 				</tr>
             </thead>
             <tbody>
@@ -128,17 +184,19 @@
 	    	<button type="button" onclick="location.href='delete.do?gno=${list[0].galleryNo}'">삭제하기</button>
     	</c:if>
     </div>
-<br><br><br><br><br>
-<script>
-        function insertReply(){
+    <br><br><br><br><br>
+	<script>
+		function insertReply(){
         	$.ajax({
         		url: "rinsert.do",
         		data: {
+        			rating: $('input[name="rating"]:checked').val(),
         			content: $("#replyContent").val(),
         			gno: ${list[0].galleryNo}
         		},
         		type: "post",
         		success: function(result){
+        			$("input:radio[name='rating']").prop('checked',false);
         			$("#replyContent").val("");
         			if(result>0){
         				alert("댓글이 등록되었습니다.");
@@ -160,13 +218,36 @@
     					for(var i in list){//for in 문
     						result += "<tr>"
     										+"<td>"+list[i].reflyWriter + "</td>"
-    										+"<td>"+list[i].replyContent + "</td>"
-    										+"<td>"+list[i].createDate + "</td>"
-    								+ "</tr>";
+    										+"<td>" 
+    											+ "<div class='rate' data-rate='"+list[i].rating+"'>"
+    												+ "<i class='fas fa-star'></i>"
+    												+ "<i class='fas fa-star'></i>"
+    												+ "<i class='fas fa-star'></i>"
+    												+ "<i class='fas fa-star'></i>"
+    												+ "<i class='fas fa-star'></i>"
+    											+ "</div>"
+    										+ "</td>"
+    										+ "<td>"+list[i].replyContent + "</td>"
+    										+ "<td>"+list[i].createDate + "</td>"
+    								 + "</tr>";
     					}
     					//tbody를 골라 innerHtml로 넣어주기
     					$("#reply-area tbody").html(result);
+    					
+    					//tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.
+    					$(function(){
+    						var	rating = $('.rate');
+    						console.log(rating);
+    						rating.each(function(){	
+    							var targetScore = $(this).attr('data-rate');
+    							console.log(targetScore);
+    							$(this).find("svg:nth-child(-n"+targetScore+")").css({color:'#fc0'});
+    						});
+    					});
+    					
+    					
     				},
+    				
     				error: function(){
     					console.log("댓글리스트용 ajax 실패");
     							}	
@@ -184,20 +265,43 @@
 					//댓글 개수만큼 반복=> 누적(문자열)
 					var result = "";
 					for(var i in list){//for in 문
-						result += "<tr>"
+						result +=  "<tr>"
 										+"<td>"+list[i].reflyWriter + "</td>"
-										+"<td>"+list[i].replyContent + "</td>"
-										+"<td>"+list[i].createDate + "</td>"
+										+"<td>" 
+											+ "<div class='rate' data-rate='"+list[i].rating+"'>"
+												+ "<i class='fas fa-star'></i>"
+												+ "<i class='fas fa-star'></i>"
+												+ "<i class='fas fa-star'></i>"
+												+ "<i class='fas fa-star'></i>"
+												+ "<i class='fas fa-star'></i>"
+											+ "</div>"
+										+ "</td>"
+										+ "<td>"+list[i].replyContent + "</td>"
+										+ "<td>"+list[i].createDate + "</td>"
 								+ "</tr>";
+
 					}
 					//tbody를 골라 innerHtml로 넣어주기
 					$("#reply-area tbody").html(result);
+					
+					//tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.
+					$(function(){
+						var	rating = $('.rate');
+						console.log(rating);
+						rating.each(function(){	
+							var targetScore = $(this).attr('data-rate');
+							$(this).find("svg:nth-child(-n"+targetScore+")").css({color:'#fc0'});
+						});
+					});
+					
+					
 				},
+				
 				error: function(){
 					console.log("댓글리스트용 ajax 실패");
 							}	
 			});
     	});
-        </script>
+	</script>
 </body>
 </html>

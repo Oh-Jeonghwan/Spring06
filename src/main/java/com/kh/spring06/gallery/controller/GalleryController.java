@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -42,12 +43,10 @@ public class GalleryController {
 			    	  , @ModelAttribute Criteria cri) throws Exception {
 		 
 		//  커맨드 객체로 Criteria를 매개변수로 넣어줘, 넘어오는 page와 perPageNum정보를 받습니다.
+        // 해당 cri 를 이용해서 service->dao->mapper.xml 순으로 접근하면서 DB처리를 해 cri 전달된
+        // 현재 페이지 정보를 기준으로 <GalleryThumbnail> 객체를 담은 List가 반환.
 		 
-         // 해당 cri 를 이용해서 service->dao->mapper.xml 순으로 접근하면서 DB처리를 해 cri 전달된
-
-         // 현재 페이지 정보를 기준으로 <GalleryThumbnail> 객체를 담은 List가 반환될 것입니다.
-		 
-		 /*
+		    /*
 			 * boardLimit가 10이라고 가정하에
 			 * currentPage = 1 => 시작값 1, 끝값 10
 			 * currentPage = 2 => 시작값 11, 끝값 20
@@ -164,6 +163,7 @@ public class GalleryController {
 	 public String content(@RequestParam int bno
 			 			  , Model model
 			 			  , HttpSession session) {
+		 
 		 int result = galleryService.galleryCountUp(bno);
 		 List<GalleryContent> list = new ArrayList<>();
 		 
@@ -191,6 +191,7 @@ public class GalleryController {
 	 @PostMapping("/rinsert.do")
 	 public int gRinsert(@RequestParam String content
 			 		   , @RequestParam int gno
+			 		   , @RequestParam int rating
 			 		   , HttpSession session) {
 		 
 		 GalleryReply gr = new GalleryReply();
@@ -200,7 +201,7 @@ public class GalleryController {
 		 gr.setRefGno(gno);
 		 gr.setReplyContent(content);
 		 gr.setReflyWriter(galleryWriter);
-		 
+		 gr.setRating(rating);
 		 int result = galleryService.gRinsert(gr);
 		 
 		 return result;
