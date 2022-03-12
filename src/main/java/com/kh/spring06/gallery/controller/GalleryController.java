@@ -66,6 +66,13 @@ public class GalleryController {
 		 
 		 List<GalleryThumbnail> list = galleryService.galleryList(param);
 		 
+		 for(int i=0;i<list.size();i++) {
+			 int gno = list.get(i).getGalleryNo();
+			 String avg = galleryService.avgRating(gno);
+			 double rating = Double.parseDouble(avg);
+			
+			 list.get(i).setRating(rating);
+		 }
 		 
 		// 이제 view jsp 페이지에서 페이징 처리를 위해 사용할 PageMaker 객체를 생성하고
 		 PgaeDto pageMaker =new PgaeDto();

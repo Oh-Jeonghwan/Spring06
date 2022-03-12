@@ -39,4 +39,6 @@ public interface GalleryDao {
 
 	int gDelete(int gno);
 
+	String avgRating(int gno);
+
 }

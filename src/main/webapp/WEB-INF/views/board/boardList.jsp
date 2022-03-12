@@ -77,7 +77,7 @@
 					<c:choose>
 						<c:when test="${empty list}">
 							<tr>
-								<td colspan="5">조회된 결과가 없습니다.</td>
+								<td colspan="5" style="text-align:center">조회된 결과가 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>

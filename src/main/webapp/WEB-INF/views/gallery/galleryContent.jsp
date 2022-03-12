@@ -7,8 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"></script>
+
 <style>
 	.outer{
 		border-bottom: solid black 1px;
@@ -71,7 +70,7 @@
 	}
 	
 	.rating label{
-		font-size: 1.5em; /* 이모지 크기 */
+		font-size: 1em; /* 이모지 크기 */
 		color: transparent; /* 기존 이모지 컬러 제거 */
 		text-shadow: 0 0 0 #f0f0f0; /* 새 이모지 색상 부여 text-shadow 0 0 0은 면을 다 채움 */
 	}
@@ -91,12 +90,6 @@
 	.rating input[type=radio]:checked ~ label{
     	text-shadow: 0 0 0 #fc0; /*체크된 후에 색 유지*/
 	}
-	
-	/*
-	.rate svg:nth-child(-n+3){
-		color:#F05522;
-	}
-	*/
 </style>
 </head>
 <body style="width:1000px; margin:auto;">
@@ -217,27 +210,26 @@
     					var result = "";
     					for(var i in list){//for in 문
     						result += "<tr>"
-    										+"<td>"+list[i].reflyWriter + "</td>"
-    										+"<td>" 
-    											+ "<div class='rate' data-rate='"+list[i].rating+"'>"
-    												+ "<i class='fas fa-star'></i>"
-    												+ "<i class='fas fa-star'></i>"
-    												+ "<i class='fas fa-star'></i>"
-    												+ "<i class='fas fa-star'></i>"
-    												+ "<i class='fas fa-star'></i>"
-    											+ "</div>"
-    										+ "</td>"
-    										+ "<td>"+list[i].replyContent + "</td>"
-    										+ "<td>"+list[i].createDate + "</td>"
-    								 + "</tr>";
+											+"<td>"+list[i].reflyWriter + "</td>"
+											+"<td style='width:150px'>" 
+												+ "<div class='rate' data-rate='"+list[i].rating+"'>"
+													+ "<i class='fas fa-star'></i>"
+													+ "<i class='fas fa-star'></i>"
+													+ "<i class='fas fa-star'></i>"
+													+ "<i class='fas fa-star'></i>"
+													+ "<i class='fas fa-star'></i>"
+												+ "</div>"
+											+ "</td>"
+											+ "<td style='width:500px'>"+list[i].replyContent + "</td>"
+											+ "<td style='width:200px'>"+list[i].createDate + "</td>"
+									+ "</tr>";
     					}
     					//tbody를 골라 innerHtml로 넣어주기
     					$("#reply-area tbody").html(result);
     					
-    					//tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.
+    					//불러온 점수에 따른 별점 css채우기 (tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.)
     					$(function(){
     						var	rating = $('.rate');
-    						console.log(rating);
     						rating.each(function(){	
     							var targetScore = $(this).attr('data-rate');
     							console.log(targetScore);
@@ -267,7 +259,7 @@
 					for(var i in list){//for in 문
 						result +=  "<tr>"
 										+"<td>"+list[i].reflyWriter + "</td>"
-										+"<td>" 
+										+"<td style='width:150px'>" 
 											+ "<div class='rate' data-rate='"+list[i].rating+"'>"
 												+ "<i class='fas fa-star'></i>"
 												+ "<i class='fas fa-star'></i>"
@@ -276,18 +268,17 @@
 												+ "<i class='fas fa-star'></i>"
 											+ "</div>"
 										+ "</td>"
-										+ "<td>"+list[i].replyContent + "</td>"
-										+ "<td>"+list[i].createDate + "</td>"
+										+ "<td style='width:500px'>"+list[i].replyContent + "</td>"
+										+ "<td style='width:200px'>"+list[i].createDate + "</td>"
 								+ "</tr>";
 
 					}
 					//tbody를 골라 innerHtml로 넣어주기
 					$("#reply-area tbody").html(result);
 					
-					//tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.
+					//불러온 점수에 따른 별점 css채우기 (tbody를 채워주고 해야하기 때문에 여기다 적어줘야 한다.)
 					$(function(){
 						var	rating = $('.rate');
-						console.log(rating);
 						rating.each(function(){	
 							var targetScore = $(this).attr('data-rate');
 							$(this).find("svg:nth-child(-n"+targetScore+")").css({color:'#fc0'});

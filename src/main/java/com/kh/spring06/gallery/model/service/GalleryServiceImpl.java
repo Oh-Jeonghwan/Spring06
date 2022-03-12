@@ -89,4 +89,9 @@ public class GalleryServiceImpl implements GalleryService {
 		return galleryDao.gDelete(gno);
 	}
 
+	@Override
+	public String avgRating(int gno) {
+		return galleryDao.avgRating(gno);
+	}
+
 }

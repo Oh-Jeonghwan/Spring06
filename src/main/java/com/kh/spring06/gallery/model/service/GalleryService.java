@@ -39,4 +39,6 @@ public interface GalleryService {
 
 	int gDelete(int gno);
 
+	String avgRating(int gno);
+
 }

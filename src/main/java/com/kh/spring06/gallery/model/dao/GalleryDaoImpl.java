@@ -88,4 +88,10 @@ public class GalleryDaoImpl implements GalleryDao{
 		return sqlSession.update("gallery.gDelete",gno);
 	}
 
+	@Override
+	public String avgRating(int gno) {
+		String avg = sqlSession.selectOne("gallery.avgRating", gno);
+		return avg;
+	}
+
 }

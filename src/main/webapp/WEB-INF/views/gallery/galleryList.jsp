@@ -60,6 +60,18 @@
 		max-width:200px;
 		max-height:300px;
 	}
+	
+	.fa-star {
+	color:#fc0;
+	}
+	
+	.rating .star-wrap{width:18px; display:inline-block;}
+	
+	.rating .star{
+		width:0%;
+		overflow:hidden;
+	}
+	
 </style>
 </head>
 <body  style="width:1000px; margin:auto;">
@@ -87,6 +99,24 @@
                                 No.${b.galleryNo } ${b.galleryTitle }. <br>
                            	        조회수:${b.count }
                             </p>
+                            <div class="rating" data-rate="${b.rating }">
+                            	평점: ${b.rating }
+								<div class="star-wrap">
+									<div class="star"><i class="fas fa-star"></i></div>		
+								</div>
+								<div class="star-wrap">
+									<div class="star"><i class="fas fa-star"></i></div>		
+								</div>
+								<div class="star-wrap">
+									<div class="star"><i class="fas fa-star"></i></div>		
+								</div>
+								<div class="star-wrap">
+									<div class="star"><i class="fas fa-star"></i></div>		
+								</div>
+								<div class="star-wrap">
+									<div class="star"><i class="fas fa-star"></i></div>		
+								</div>
+							</div>
                         </div>
                     </c:forEach>
                 </c:otherwise>
@@ -137,12 +167,37 @@
     </div>
 	<script>
 	    $(function(){
+	    	//상세보기 이동  스크립트
 	        $(".thumbnail").click(function(){
 	            //클릭될 때마다 url 요청=> location.href
 	            var bno = $(this).children().eq(0).val();
 	            location.href = "content.do?bno="+bno;
 	        });
+	        
+	        
+	        //별점 구현 스크립트
+	        var rating = $('.rating');
+	        
+	        rating.each(function(){
+	        	var $this = $(this); //3과 3.5를 포함한 각각의 .rating 객체들
+	        	var targetScore = $this.attr('data-rate');//그것들의 data-rate 속성을 가져온다.
+	        	var firstdigit = targetScore.split('.');
+	        	
+	        	if(firstdigit.length > 1){//.이 있다는 얘기
+	        		for(var i = 0; i<firstdigit[0]; i++){
+	        			$this.find('.star').eq(i).css({width:'100%'});
+	        		}				
+	        		$this.find('.star').eq(firstdigit[0]).css({width:firstdigit[1]+'0%'});
+	        	}
+	        	else{
+	        		for(var i = 0; i<targetScore; i++){
+	        			$this.find('.star').eq(i).css({width:'100%'});
+	        		}
+	        	}
+	        });
 	    });
+	    
+	    
 	</script>
 <br><br><br><br><br>
 </body>

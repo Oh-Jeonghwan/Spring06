@@ -148,5 +148,12 @@
   	  	   SET STATUS='N'
   	  	 WHERE GALLERY_NO = #{gno}
   	  </update>
+  	  
+  	  <select id="avgRating" parameterType="int" resultType="string">
+  	  	SELECT NVL2(AVG(RATING),TO_CHAR(AVG(RATING), 'FM9990.0'),0) RATING
+		FROM GALLERY_REPLY
+		WHERE REF_GNO=#{gno}
+		AND STATUS='Y'  	  
+	 </select>
   	
   </mapper>

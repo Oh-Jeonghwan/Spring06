@@ -10,6 +10,7 @@
 		width:950px;
 		margin:auto;
 	}
+	
 	.gAdd{
 		padding: 50px;
 		margin:auto;

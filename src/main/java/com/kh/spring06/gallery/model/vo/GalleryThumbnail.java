@@ -12,4 +12,5 @@ public class GalleryThumbnail {
 	private String galleryTitle;
 	private String path;
 	private int count;
+	private double rating;
 }
