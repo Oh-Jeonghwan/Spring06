@@ -1,5 +1,6 @@
 package com.kh.spring06.board.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,14 +48,17 @@ public class BoardDaoImpl implements BoardDao{
 	public int insertBReply(BoardReply br) {
 		return sqlSession.insert("board.insertBReply",br);
 	}
+	//보드 댓글 리스트 조회
 	@Override
 	public List<BoardReply> brList(int bno) {
 		return sqlSession.selectList("board.brList", bno);
 	}
+	//수정을 위한 기존 보드 내용 불러오기
 	@Override
 	public Board selectBoard(int bno) {
 		return sqlSession.selectOne("board.selectdBoard",bno);
 	}
+	//보드 수정사항 업데이트
 	@Override
 	public int boardUpdate(Board b) {
 		return sqlSession.update("board.boardUpdate",b);
@@ -62,6 +66,35 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public int bDelete(int bno) {
 		return sqlSession.update("board.bDelete",bno);
+	}
+	//좋아요를 했는지 체크하기
+	@Override
+	public int likeCheck(int boardNo, String memId) {
+		Map<String,Object> like = new HashMap<>();
+		like.put("bno", boardNo);
+		like.put("memId", memId);
+		return sqlSession.selectOne("board.likeCheck",like);
+	}
+	//좋아요 개수
+	@Override
+	public int likeCount(int boardNo) {
+		return sqlSession.selectOne("board.likeCount",boardNo);
+	}
+	//좋아요 인서트
+	@Override
+	public int likeInsert(int boardNo, String memId) {
+		Map<String,Object> like = new HashMap<>();
+		like.put("bno", boardNo);
+		like.put("memId", memId);
+		return sqlSession.insert("board.likeInsert",like);
+	}
+	//좋아요 업데이트
+	@Override
+	public int likeUpdate(int boardNo, String memId) {
+		Map<String,Object> like = new HashMap<>();
+		like.put("bno", boardNo);
+		like.put("memId", memId);
+		return sqlSession.update("board.likeUpdate",like);
 	}
 
 }

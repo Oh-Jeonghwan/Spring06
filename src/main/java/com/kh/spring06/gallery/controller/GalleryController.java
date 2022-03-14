@@ -122,6 +122,7 @@ public class GalleryController {
 		
 		if(result>0) {
 			//갤러리 테이블과 어태치먼트 테이블의 조인을 위한 갤러리 번호 가져오기 
+			//(last_number로 가져왔지만 실제 존재하는 게시물의 번호가 아닌 다음 만들어질 번호를 가져옴 따라서 -1)
 			int refGno = galleryService.selectGno()-1;
 			
 			

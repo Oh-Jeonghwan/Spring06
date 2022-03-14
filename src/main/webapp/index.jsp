@@ -26,7 +26,6 @@
 		vertical-align: middle; 
 	}
 
-
 	.login-form,#user-info {float:right;}
 
     #user-info a{

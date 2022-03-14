@@ -31,4 +31,12 @@ public interface BoardService {
 
 	int bDelete(int bno);
 
+	int likeCheck(int boardNo, String memId);
+
+	int likeCount(int boardNo);
+
+	int likeInsert(int boardNo, String memId);
+
+	int likeUpdate(int boardNo, String memId);
+
 }

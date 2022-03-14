@@ -79,9 +79,9 @@ public class BoardController {
 		
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("list",list);
-		
 		return "board/boardList";
 	}
+	
 	//게시글 작성 폼을 띄워주는 메소드
 	@GetMapping("/write.do")
 	public String write(HttpSession session) {
@@ -125,6 +125,7 @@ public class BoardController {
 	//게시글 상세보기 메소드
 	@GetMapping("content.do")
 	public String content(@RequestParam int boardNo
+						, HttpSession session
 						, Model model) {
 		
 		//게시글 조회 흐름
@@ -136,10 +137,37 @@ public class BoardController {
 		//조회수 증가가 성공했다면
 		if(result>0) {
 			board = boardService.content(boardNo);
-		}	
+		}
+		
+		Map<String,Integer> map = new HashMap<>();
+		
+		
+		//----------아이디와 게시글 번호에 따른 좋아요의 여부와 좋아요 개수------------------------\
+		if((Member)session.getAttribute("loginUser")!=null) {
+			String memId = ((Member)session.getAttribute("loginUser")).getMemberId();
+			
+			int likeCheck = boardService.likeCheck(boardNo, memId);//1 or 0이 와야 함
+			int likeCount = boardService.likeCount(boardNo); //게시물당 총 좋아요 개수
+			
+			map.put("likeCheck",likeCheck);
+			map.put("likeCount",likeCount);
+		}
+		else {
+			String memId = "";
+			
+			int likeCheck = boardService.likeCheck(boardNo, memId);//1 or 0이 와야 함
+			int likeCount = boardService.likeCount(boardNo); //게시물당 총 좋아요 개수
+			
+			map.put("likeCheck",likeCheck);
+			map.put("likeCount",likeCount);
+		}
+		
+		//---------------------------------------------------------------------
+		
 		
 		if(board!=null) {
 			//수하물 부치기
+			 model.addAttribute("like",map);
 			 model.addAttribute("board",board);
 			//응답뷰
 			return "board/content";
@@ -225,5 +253,35 @@ public class BoardController {
 		return "redirect:union.do";
 	}
 	
+	@ResponseBody
+	@PostMapping("likeUpdate.do")
+	public Map<String,Integer> likeUpdate(@RequestParam int boardNo
+										, @RequestParam String memId){
+		Map<String,Integer> map = new HashMap<>();
+		
+		if(memId=="") {//로그인이 안됐을 때
+			map.put("msg", 100);
+		}
+		else {//로그인 됐을 때
+			//좋아요 체크( 0이면 insert / 1이면 0으로 업데이트)
+			map.put("msg", 99);
+			
+			int likeCheck = boardService.likeCheck(boardNo, memId);//1 or 0
+			
+			if(likeCheck==0) { //좋아요가 비어있을 때 인서트
+				int likeInsert = boardService.likeInsert(boardNo, memId);
+				map.put("likeInsert", likeInsert);
+				map.put("likeUpdate", 0);
+			}
+			else { //좋아요가 돼있을 때 0으로 업데이트
+				int likeUpdate = boardService.likeUpdate(boardNo,memId);
+				map.put("likeInsert", 0);
+				map.put("likeUpdate", likeUpdate);
+			}
+			int likeCount = boardService.likeCount(boardNo);
+			map.put("likeCount", likeCount);
+		}
+		return map;
+	}
 	
 }

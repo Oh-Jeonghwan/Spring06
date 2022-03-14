@@ -68,4 +68,24 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.bDelete(bno);
 	}
 
+	@Override
+	public int likeCheck(int boardNo, String memId) {
+		return boardDao.likeCheck(boardNo,memId);
+	}
+
+	@Override
+	public int likeCount(int boardNo) {
+		return boardDao.likeCount(boardNo);
+	}
+
+	@Override
+	public int likeInsert(int boardNo, String memId) {
+		return boardDao.likeInsert(boardNo,memId);
+	}
+
+	@Override
+	public int likeUpdate(int boardNo, String memId) {
+		return boardDao.likeUpdate(boardNo,memId);
+	}
+
 }

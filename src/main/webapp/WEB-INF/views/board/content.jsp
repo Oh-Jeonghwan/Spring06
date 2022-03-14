@@ -43,10 +43,28 @@
 	}
 	
 	table{border: 1px solid white;}
+	
     table input, table textarea{
         width: 100%;
         box-sizing: border-box;
     }
+    
+    .like{
+    	margin:auto;
+    }
+    
+    .likeShape{
+    	width: 200px;
+    	height: 70px;
+    	border:1px solid black;
+    }
+    
+    #btnLike{
+    	padding-right: 20px; 
+    	background-color:transparent; 
+    	border:none;
+    }
+    
 </style>
 </head>
 <body  style="width:1000px; margin:auto;">
@@ -60,33 +78,59 @@
 	<br>
 	<div class="outer">
 		<div class="list-area">
-	            	<div class="info">
-	            		<div class="title"><b>${board.boardTitle}</b></div>
-	            		<br>
-	            		<div class="writer">${board.boardWriter}</div>
-	            		<br>
-	            		<div class="date">${board.createDate}</div>
-	            	</div>
-	            	<hr>
-	            	<br>
-	            	<div class="explain">
-						${board.boardContent}
-	    			</div>
+			<div class="info">
+				<div class="title"><b>${board.boardTitle}</b></div>
+				<br>
+				<div class="writer">${board.boardWriter}</div>
+				<br>
+				<div class="date">${board.createDate}</div>
+			</div>
+			<hr>
+			<br>
+			<div class="explain">
+				${board.boardContent}
+			</div>
+			
+			<div class="like" align="center">
+			<!-- 
+				<button type="button" id="btnLike">
+					<img src="${ isLiked == true ? '${pageContext.request.contextPath }/resources/like.png' : '${pageContext.request.contextPath }/resources/emptylike.png' }" 
+						id="like_img" height="50px" width="50px">
+				</button>
+				<span id="like_count">${like_count }</span>  
+			 -->
+			 	<div class="likeShape" align="right">
+			 		<button type="button" id="btnLike"> 
+			 			<c:choose>
+			 				<c:when test="${like.likeCheck==0}">
+			 					<span id="likeCount">${like.likeCount}</span>
+			 					<img src="${pageContext.request.contextPath }/resources/emptylike.png" id="like_img" height="50px" width="50px">
+			 				</c:when>
+			 				<c:otherwise>
+			 					<span id="likeCount">${like.likeCount}</span>
+			 					<img src="${pageContext.request.contextPath }/resources/like.png" id="like_img" height="50px" width="50px">
+			 				</c:otherwise>
+			 			</c:choose>
+					</button>
+				</div>
+			</div>	
+			<br>
 	    </div>
     </div>
+  	
     <br>
     <!-- 댓글 영역 -->
     <div id="reply-area">
         <table border="1" align="center" class="table table-stripped">
             <thead>
-				<!--로그인이 되어있을 경우: 댓글작성 가능-->
-				<!--로그인이 안 되어 있을 경우: 댓글작성 불가능-->
 				<tr>
-					<th>댓글 작성</th>
+					<th style="vertical-align:middle">댓글 작성</th>
 					<td>
 						<textarea id="replyContent" cols="50" rows="3" style="resize:none;" ${(loginUser == null)?'readonly':'' } placeholder="로그인 후 작성 가능"></textarea>
 					</td>
-					<td><button ${(loginUser != null)?"onclick=insertReply()":""} >댓글등록</button></td>
+						<!--로그인이 되어있을 경우: 댓글작성 가능-->
+						<!--로그인이 안 되어 있을 경우: 댓글작성 불가능-->
+					<td style="vertical-align:middle"><button ${(loginUser != null)?"onclick=insertReply()":""} >댓글등록</button></td>
 				</tr>
             </thead>
             <tbody>
@@ -151,8 +195,8 @@
         	});
         }
         
-      //댓글은 화면이 ㄹ ㅗ딩되었을 때 곧바로 뿌려주어야함 => window.onload => $(function)
      	$(function(){
+     		//댓글은 화면이 ㄹ ㅗ딩되었을 때 곧바로 뿌려주어야함 => window.onload => $(function)
 			$.ajax({
 				url: "rlist.do",
 				type:"post",
@@ -175,6 +219,41 @@
 							}	
 			});
     	});
+		
+     
+		$("#btnLike").click(function(){
+			//좋아요 클릭 시 하트 채워지고 비워지는 ajax
+			$.ajax({
+				url:"likeUpdate.do",
+				type:"post",
+				data:{
+					boardNo: ${board.boardNo},
+					memId: "${loginUser.memberId}"
+				},
+				success: function(data){
+					var result = "";
+					if(data.msg==100){
+						alert("로그인을 해주세요");
+					}
+					else{ //좋아요 값이 1일 때 0일 때 나눠줘야 함
+						if(data.likeInsert==1 && data.likeUpdate==0){//likeinsert가 1 / likeupdate0일 때 (좋아요 버튼이 채워진다.)
+							result = "<span id='likeCount'>"+data.likeCount+"</span>"
+		 						    +"<img src='${pageContext.request.contextPath }/resources/like.png' id='like_img' height='50px' width='50px'>"
+							alert("좋아요 감사");
+						}
+						else{//likeinsert가 0 / likeupdate가 1일 때 (좋아요 버튼이 비워진다.)
+							result="<span id='likeCount'>"+data.likeCount+"</span>"
+	 							  +"<img src='${pageContext.request.contextPath }/resources/emptylike.png' id='like_img' height='50px' width='50px'>"
+							alert("내가 싫어요?");
+						}
+						$("#btnLike").html(result);
+					}
+				} ,
+				error: function(){
+					console.log("실패");
+				}
+			});
+		});
 	
     </script>
 </body>
