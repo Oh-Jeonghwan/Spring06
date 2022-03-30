@@ -72,6 +72,16 @@
 		overflow:hidden;
 	}
 	
+	ul {
+	    list-style: none;
+	    padding-left: 0px;
+	    display:inline-block;
+ 	}
+ 	
+ 	ul li{
+ 		display:inline-block;
+ 	}
+	
 </style>
 </head>
 <body  style="width:1000px; margin:auto;">
@@ -180,7 +190,7 @@
 	        
 	        rating.each(function(){
 	        	var $this = $(this); //3과 3.5를 포함한 각각의 .rating 객체들
-	        	var targetScore = $this.attr('data-rate');//그것들의 data-rate 속성을 가져온다.
+	        	var targetScore = $this.attr('data-rate');//attr:attribute(속성)-그것들의 data-rate 속성을 가져온다.
 	        	var firstdigit = targetScore.split('.');
 	        	
 	        	if(firstdigit.length > 1){//.이 있다는 얘기

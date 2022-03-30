@@ -86,19 +86,13 @@ public class ProductController {
 		//조회
 		List<Product> list=productService.selectProductList(param);
 		
-		//수하물을 붙여서 =? =>model 소포상
+		
 		model.addAttribute("list",list);
 		//응답뷰 지정
 		return "product/list";
 	}
+	
 	//상품 상세조회 메소드
-	//요청 파라미터 방식
-	
-	//상품 상세조회
-	//@GetMapping("/detail.do")
-	//public String detail(@RequestParam int pno
-	//					, Model model) {
-	
 	//주소변수 방식
 	@GetMapping("/detail/{pno}")
 	public String detail(@PathVariable int pno

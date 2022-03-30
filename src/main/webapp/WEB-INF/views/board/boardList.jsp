@@ -47,7 +47,15 @@
         opacity: 0.7;
 	}
 	
-	
+	ul {
+	    list-style: none;
+	    padding-left: 0px;
+	    display:inline-block;
+ 	}
+ 	
+ 	ul li{
+ 		display:inline-block;
+ 	}
 </style>
 </head>
 <body style="width:1000px; margin:auto;">
